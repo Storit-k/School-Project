@@ -183,14 +183,14 @@ class GUI(QMainWindow):
                 pass
 
     def change_datetime_format(self, target: str):
-        eval(f'self.ui.{target}_datetime_day.setEnabled(False)')
-        eval(f'self.ui.{target}_datetime_month.setEnabled(False)')
+        getattr(self.ui, f'{target}_datetime_day').setEnabled(False)
+        getattr(self.ui, f'{target}_datetime_month').setEnabled(False)
 
-        dis_format = eval(f'self.ui.{target}_date_format.currentData()')
+        dis_format = getattr(self.ui, f'{target}_date_format').currentData()
         if 'm' in dis_format:
-            eval(f'self.ui.{target}_datetime_month.setEnabled(True)')
+            getattr(self.ui, f'{target}_datetime_month').setEnabled(True)
         if 'd' in dis_format:
-            eval(f'self.ui.{target}_datetime_day.setEnabled(True)')
+            getattr(self.ui, f'{target}_datetime_day').setEnabled(True)
 
     def create_add_event(self, parse: bool = False):
         event = self.ui.create_theme_lineedit.text()

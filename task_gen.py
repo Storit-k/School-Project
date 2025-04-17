@@ -51,7 +51,6 @@ class Combinator:
         self.__theme_id = theme_id
         self.__theme: list = []
 
-        main_event = {}
         self.__question: str | dict | None = None
         self.__answers = []
 
@@ -172,10 +171,4 @@ class Combinator:
             task(answer=answer, is_correct=i == 0)
         task.complete()
         return task
-
-
-if __name__ == "__main__":
-    db = Database("data.db")
-    combinator = Combinator(db, 1)
-    task = combinator.generate_task()
-    print(task())
+    

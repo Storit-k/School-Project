@@ -43,7 +43,6 @@ if __name__ == "__main__":
 
     p = app.palette()
     p.setColor(p.ColorRole.Text, QColor(255, 255, 255))
-    # p.setColor(p.ColorRole.Window, QColor(255, 255, 255))
     app.setPalette(p)
 
     gui = GUI(db)
