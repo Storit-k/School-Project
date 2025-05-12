@@ -2,23 +2,43 @@ from database import Database
 import random as rand
 
 
+months_1 = {
+    1: 'январь', 2: 'февраль', 3: 'март', 4: 'апрель', 5: 'май', 6: 'июнь',
+    7: 'июль', 8: 'август', 9: 'сентябрь', 10: 'октябрь', 11: 'ноябрь', 12: 'декабрь'
+}
+months_2 = {
+    1: 'января', 2: 'февраля', 3: 'марта', 4: 'апреля', 5: 'мая', 6: 'июня',
+    7: 'июля', 8: 'августа', 9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря'
+}
+
+
 class Task:
-    def __init__(self, question: str | dict):
+    def __init__(self, question: str | dict, umn: bool = True):  # umn - use months names
         self.is_date_task = False
         self.is_event_task = False
+        self.umn = umn
         self.question: str | dict = question
         self.answers: dict[str:bool] = dict()
 
     def __call__(self, answer: str | dict = '', is_correct: bool = False, *args, get_answer: bool = False):
         if not any((self.is_date_task, self.is_event_task)):
             if isinstance(answer, dict):
-                match answer:
-                    case {'year': year, 'month': None, 'day': None}:
-                        answer = year
-                    case {'year': year, 'month': month, 'day': None}:
-                        answer = f'{month:>02}.{year:>04}'
-                    case {'year': year, 'month': month, 'day': day}:
-                        answer = f'{day:>02}.{month:>02}.{year:>04}'
+                if self.umn:
+                    match answer:
+                        case {'year': year, 'month': None, 'day': None}:
+                            answer = year
+                        case {'year': year, 'month': month, 'day': None}:
+                            answer = f'{months_1[int(month)]} {year}'
+                        case {'year': year, 'month': month, 'day': day}:
+                            answer = f'{int(day)} {months_2[int(month)]} {year}'
+                else:
+                    match answer:
+                        case {'year': year, 'month': None, 'day': None}:
+                            answer = year
+                        case {'year': year, 'month': month, 'day': None}:
+                            answer = f'{month:>02}.{year:>04}'
+                        case {'year': year, 'month': month, 'day': day}:
+                            answer = f'{day:>02}.{month:>02}.{year:>04}'
             self.answers.update({answer: is_correct})
         else:
             if get_answer:
@@ -31,13 +51,22 @@ class Task:
     def complete(self):
         if isinstance(self.question, dict):
             self.is_date_task = True
-            match self.question:
-                case {'year': year, 'month': None, 'day': None}:
-                    self.question = year
-                case {'year': year, 'month': month, 'day': None}:
-                    self.question = f'{month:>02}.{year:>04}'
-                case {'year': year, 'month': month, 'day': day}:
-                    self.question = f'{day:>02}.{month:>02}.{year:>04}'
+            if self.umn:
+                match self.question:
+                    case {'year': year, 'month': None, 'day': None}:
+                        self.question = year
+                    case {'year': year, 'month': month, 'day': None}:
+                        self.question = f'{months_1[int(month)]} {year}'
+                    case {'year': year, 'month': month, 'day': day}:
+                        self.question = f'{int(day)} {months_2[int(month)]} {year}'
+            else:
+                match self.question:
+                    case {'year': year, 'month': None, 'day': None}:
+                        self.question = year
+                    case {'year': year, 'month': month, 'day': None}:
+                        self.question = f'{month:>02}.{year:>04}'
+                    case {'year': year, 'month': month, 'day': day}:
+                        self.question = f'{day:>02}.{month:>02}.{year:>04}'
         else:
             self.is_event_task = True
 
@@ -74,8 +103,12 @@ class Combinator:
             value = int(n_date[key]) + shift
             if key == 'month' and value > 12:
                 value -= 12
+            elif key == 'month' and value < 1:
+                value += 12
             if key == 'day' and value > 30:
                 value -= 30
+            elif key == 'day' and value < 1:
+                value += 30
 
             n_date[key] = f"{value:0>2}"
             self.__answers.append(n_date)
@@ -166,7 +199,8 @@ class Combinator:
             strategies.remove(strategy)
             strategy = rand.choice(strategies)
 
-        task = Task(self.__question)
+        umn = bool(self.db.get_settings()['use_months_names'])
+        task = Task(self.__question, umn=umn)
         for i, answer in enumerate(self.__answers):
             task(answer=answer, is_correct=i == 0)
         task.complete()

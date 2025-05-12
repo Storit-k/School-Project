@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QComb
     QPlainTextEdit, QPushButton, QRadioButton, QSizePolicy,
     QSpacerItem, QSpinBox, QStackedWidget, QTableWidget,
     QTableWidgetItem, QVBoxLayout, QWidget)
-import res_rc
+import pgui.pygui.res_rc
 
 class Ui_MainWindow(object):
     def __init__(self, MainWindow):
@@ -441,7 +441,7 @@ class Ui_MainWindow(object):
         self.edit_page.setObjectName(u"edit_page")
         self.edit_theme_lineedit = QLineEdit(self.edit_page)
         self.edit_theme_lineedit.setObjectName(u"edit_theme_lineedit")
-        self.edit_theme_lineedit.setGeometry(QRect(90, 420, 370, 35))
+        self.edit_theme_lineedit.setGeometry(QRect(90, 440, 370, 35))
         self.edit_themes_table = QTableWidget(self.edit_page)
         if (self.edit_themes_table.columnCount() < 2):
             self.edit_themes_table.setColumnCount(2)
@@ -450,7 +450,7 @@ class Ui_MainWindow(object):
         __qtablewidgetitem8 = QTableWidgetItem()
         self.edit_themes_table.setHorizontalHeaderItem(1, __qtablewidgetitem8)
         self.edit_themes_table.setObjectName(u"edit_themes_table")
-        self.edit_themes_table.setGeometry(QRect(50, 30, 922, 311))
+        self.edit_themes_table.setGeometry(QRect(50, 60, 922, 311))
         self.edit_themes_table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.edit_themes_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.edit_themes_table.horizontalHeader().setDefaultSectionSize(460)
@@ -466,7 +466,7 @@ class Ui_MainWindow(object):
         self.edit_date_format.addItem("")
         self.edit_date_format.addItem("")
         self.edit_date_format.setObjectName(u"edit_date_format")
-        self.edit_date_format.setGeometry(QRect(640, 380, 260, 35))
+        self.edit_date_format.setGeometry(QRect(640, 400, 260, 35))
         self.edit_date_format.setFrame(True)
         self.label_3 = QLabel(self.edit_page)
         self.label_3.setObjectName(u"label_3")
@@ -483,7 +483,7 @@ class Ui_MainWindow(object):
         self.edit_back_button.setFont(font4)
         self.layoutWidget_3 = QWidget(self.edit_page)
         self.layoutWidget_3.setObjectName(u"layoutWidget_3")
-        self.layoutWidget_3.setGeometry(QRect(630, 450, 281, 71))
+        self.layoutWidget_3.setGeometry(QRect(630, 460, 281, 71))
         self.verticalLayout_5 = QVBoxLayout(self.layoutWidget_3)
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -574,6 +574,9 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addWidget(self.edit_delete_button)
 
+        self.edit_theme_name_lineedit = QLineEdit(self.edit_page)
+        self.edit_theme_name_lineedit.setObjectName(u"edit_theme_name_lineedit")
+        self.edit_theme_name_lineedit.setGeometry(QRect(190, 20, 641, 31))
         self.stackedWidget.addWidget(self.edit_page)
         self.delete_page = QWidget()
         self.delete_page.setObjectName(u"delete_page")
@@ -633,14 +636,14 @@ class Ui_MainWindow(object):
         self.label_5.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_6 = QLabel(self.settings_page)
         self.label_6.setObjectName(u"label_6")
-        self.label_6.setGeometry(QRect(0, 100, 1021, 31))
+        self.label_6.setGeometry(QRect(0, 210, 1021, 31))
         font10 = QFont()
         font10.setPointSize(14)
         self.label_6.setFont(font10)
         self.label_6.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_13 = QLabel(self.settings_page)
         self.label_13.setObjectName(u"label_13")
-        self.label_13.setGeometry(QRect(0, 420, 1021, 31))
+        self.label_13.setGeometry(QRect(0, 470, 1021, 31))
         self.label_13.setFont(font10)
         self.label_13.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.line_9 = QFrame(self.settings_page)
@@ -664,7 +667,7 @@ class Ui_MainWindow(object):
         self.reset_settings_button.setIconSize(QSize(18, 18))
         self.layoutWidget5 = QWidget(self.settings_page)
         self.layoutWidget5.setObjectName(u"layoutWidget5")
-        self.layoutWidget5.setGeometry(QRect(0, 140, 1031, 231))
+        self.layoutWidget5.setGeometry(QRect(0, 230, 1031, 231))
         self.gridLayout = QGridLayout(self.layoutWidget5)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
@@ -735,7 +738,7 @@ class Ui_MainWindow(object):
 
         self.layoutWidget6 = QWidget(self.settings_page)
         self.layoutWidget6.setObjectName(u"layoutWidget6")
-        self.layoutWidget6.setGeometry(QRect(0, 470, 1021, 81))
+        self.layoutWidget6.setGeometry(QRect(0, 520, 1021, 81))
         self.gridLayout_2 = QGridLayout(self.layoutWidget6)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -794,6 +797,33 @@ class Ui_MainWindow(object):
         self.line_8.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_2.addWidget(self.line_8, 3, 0, 1, 4)
+
+        self.label_19 = QLabel(self.settings_page)
+        self.label_19.setObjectName(u"label_19")
+        self.label_19.setGeometry(QRect(0, 110, 1021, 31))
+        self.label_19.setFont(font10)
+        self.label_19.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.widget = QWidget(self.settings_page)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(-4, 150, 1021, 41))
+        self.gridLayout_3 = QGridLayout(self.widget)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.use_monts_names = QCheckBox(self.widget)
+        self.use_monts_names.setObjectName(u"use_monts_names")
+
+        self.gridLayout_3.addWidget(self.use_monts_names, 0, 1, 1, 1)
+
+        self.horizontalSpacer_11 = QSpacerItem(410, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_3.addItem(self.horizontalSpacer_11, 0, 0, 1, 1)
+
+        self.line_3 = QFrame(self.widget)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.Shape.HLine)
+        self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_3.addWidget(self.line_3, 1, 0, 1, 2)
 
         self.stackedWidget.addWidget(self.settings_page)
         self.info_page = QWidget()
@@ -987,6 +1017,7 @@ class Ui_MainWindow(object):
         self.edit_create_button.setText(QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0437\u0434\u0430\u0442\u044c", None))
         self.edit_apply_button.setText(QCoreApplication.translate("MainWindow", u"\u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c", None))
         self.edit_delete_button.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
+        self.edit_theme_name_lineedit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0442\u0435\u043c\u044b:", None))
         self.delete_back_button.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0437\u0430\u0434", None))
         self.delete_delete_button.setText(QCoreApplication.translate("MainWindow", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u0412\u043d\u0438\u043c\u0430\u043d\u0438\u0435! \u0412\u044b \u0441\u043e\u0431\u0438\u0440\u0430\u0435\u0442\u0435\u0441\u044c \u0443\u0434\u0430\u043b\u0442\u044c \u0442\u0435\u043c\u0443, \u044d\u0442\u043e \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435\u043b\u044c\u0437\u044f \u0431\u0443\u0434\u0435\u0442 \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c! \u0412\u044b \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0445\u043e\u0442\u0438\u0442\u0435 \u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0438\u0442\u044c?", None))
@@ -1006,9 +1037,11 @@ class Ui_MainWindow(object):
         self.correct_hex_lineedit.setInputMask(QCoreApplication.translate("MainWindow", u"\\#<HHHHHH", None))
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0439 \u043e\u0442\u0432\u0435\u0442", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0435\u043f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0439 \u043e\u0442\u0432\u0435\u0442", None))
+        self.label_19.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435", None))
+        self.use_monts_names.setText(QCoreApplication.translate("MainWindow", u"\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u044f \u043c\u0435\u0441\u044f\u0446\u0435\u0432", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f", None))
         self.label_17.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043e \u0432 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u0435 \u043f\u0440\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0439 \u0447\u0430\u0441\u0442\u0438 \u0438\u043d\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u0438\u043a\u043b\u0430\u0434\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0435\u043a\u0442\u0430 \u0443\u0447\u0430\u0449\u0438\u043c\u0441\u044f 10\u0444\u043c\u00b9 \u043a\u043b\u0430\u0441\u0441\u0430 \u041a\u043e\u0441\u0442\u0440\u043e\u043c\u0441\u043a\u0438\u043c \u0415. \u0410.", None))
-        self.label_18.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0435\u0440\u0441\u0438\u044f: 0.1 (beta)", None))
+        self.label_18.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0435\u0440\u0441\u0438\u044f: 0.2 (beta)", None))
         self.label.setText("")
         self.home_button.setText("")
         self.settings_button.setText("")

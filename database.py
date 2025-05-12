@@ -53,6 +53,7 @@ class Database(Connection):
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS Settings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            use_months_names INTEGER NOT NULL DEFAULT 0,
             range_dates INTEGER NOT NULL DEFAULT 1,
             mix_dates INTEGER NOT NULL DEFAULT 1,
             mix_external_dates INTEGER NOT NULL DEFAULT 1,
@@ -115,6 +116,15 @@ class Database(Connection):
 
         self.update_description(theme_id, description)
         self.cursor.execute("UPDATE Themes SET creation_date=? WHERE id=?", (datetime, theme_id))
+
+        self.commit()
+
+    def rename_theme(self, theme_id: int, new_title: str):
+        self.cursor.execute("""
+        UPDATE Themes
+        SET theme=?
+        WHERE id=?
+        """, (new_title, theme_id))
 
         self.commit()
 
@@ -240,21 +250,27 @@ class Database(Connection):
 
         settings = self.cursor.fetchone()
 
-        return {
-            'range_dates': settings[1],
-            'mix_dates': settings[2],
-            'mix_external_dates': settings[3],
-            'mix_external_events': settings[4],
-            'correct_color': settings[5],
-            'incorrect_color': settings[6]
-        }
+        try:
+            return {
+                'use_months_names': settings[1],
+                'range_dates': settings[2],
+                'mix_dates': settings[3],
+                'mix_external_dates': settings[4],
+                'mix_external_events': settings[5],
+                'correct_color': settings[6],
+                'incorrect_color': settings[7]
+            }
+        except IndexError:
+            self.reset_settings()
+            return self.get_settings()
 
     def update_settings(self, settings: dict):
         self.cursor.execute("""
             UPDATE Settings
-            SET range_dates=?, mix_dates=?, mix_external_dates=?, mix_external_events=?, correct_color=?, incorrect_color=?
+            SET use_months_names=?, range_dates=?, mix_dates=?, mix_external_dates=?, mix_external_events=?, correct_color=?, incorrect_color=?
             WHERE id=1
         """, (
+            settings['use_months_names'],
             settings['range_dates'],
             settings['mix_dates'],
             settings['mix_external_dates'],
@@ -267,10 +283,11 @@ class Database(Connection):
 
     def reset_settings(self):
         self.cursor.execute("""
-            DELETE FROM Settings WHERE id=1
+            DROP TABLE Settings
         """)
+        self.__create_tables()
         self.cursor.execute("""
-            INSERT INTO Settings(id) VALUES (1)
+            INSERT INTO Settings(use_months_names) VALUES (0)
         """)
 
         self.commit()

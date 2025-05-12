@@ -43,7 +43,7 @@ class GUI(QMainWindow):
         self.ui.delete_delete_button.clicked.connect(self.delete_theme)
 
         # --- EDIT THEME PAGE ---
-        self.ui.edit_back_button.clicked.connect(lambda: self.home(reload=True))
+        self.ui.edit_back_button.clicked.connect(lambda: (self.edit_update_theme_name(), self.home(reload=True)))
         self.ui.edit_delete_button.clicked.connect(self.edit_delete_event)
         self.ui.edit_apply_button.clicked.connect(self.edit_change_event)
         self.ui.edit_create_button.clicked.connect(self.edit_add_event)
@@ -132,10 +132,11 @@ class GUI(QMainWindow):
                 pass
 
     def home_display_themes(self):
-        self.indexes_comp.clear()
         themes = self.database.get_themes()
 
         self.ui.home_themes_table.setRowCount(0)  # Clear the table
+        self.indexes_comp.clear()
+
         for row, (indx, theme, date, amount) in enumerate(themes):
             self.ui.home_themes_table.insertRow(row)
             self.indexes_comp[row] = indx
@@ -144,7 +145,7 @@ class GUI(QMainWindow):
             self.ui.home_themes_table.setItem(row, 1, QTableWidgetItem(str(amount)))
 
     def home_switch_buttons(self, state: int):
-        if state:
+        if state and self.ui.home_themes_table.item(self.ui.home_themes_table.currentRow(), 1):
             if int(self.ui.home_themes_table.item(self.ui.home_themes_table.currentRow(), 1).text()) >= 4:
                 self.ui.home_start_button.setEnabled(True)
             else:
@@ -170,6 +171,10 @@ class GUI(QMainWindow):
                 self.ui.stackedWidget.setCurrentIndex(2)
 
             case 'edit':
+                self.ui.edit_theme_name_lineedit.clear()
+                title = self.ui.home_themes_table.item(self.ui.home_themes_table.currentRow(), 0).text()
+                self.ui.edit_theme_name_lineedit.insert(title)
+
                 self.ui.stackedWidget.setCurrentIndex(3)
                 self.edit_update_events()
 
@@ -350,6 +355,14 @@ class GUI(QMainWindow):
         self.database.remove_event(event_id)
         self.edit_update_events()
 
+    def edit_update_theme_name(self):
+        new_title = self.ui.edit_theme_name_lineedit.text()
+        current_title = self.ui.home_themes_table.item(self.ui.home_themes_table.currentRow(), 0).text()
+        if (new_title != current_title) and new_title.split():
+            theme_id = self.indexes_comp[self.ui.home_themes_table.currentRow()]
+            self.database.rename_theme(theme_id, new_title)
+
+
     def delete_theme(self):
         theme_id = self.indexes_comp[self.ui.home_themes_table.currentIndex().row()]
         self.database.remove_theme(theme_id)
@@ -420,8 +433,9 @@ class GUI(QMainWindow):
 
     def load_settings(self):
         match self.database.get_settings():
-            case {'range_dates': rd, 'mix_dates': md, 'mix_external_dates': med, 'mix_external_events': mee,
-                  'correct_color': correct_hex, 'incorrect_color': incorrect_hex}:
+            case {'use_months_names': umn, 'range_dates': rd, 'mix_dates': md, 'mix_external_dates': med,
+                  'mix_external_events': mee, 'correct_color': correct_hex, 'incorrect_color': incorrect_hex}:
+                self.ui.use_monts_names.setChecked(bool(umn))
                 self.ui.range_date_checkbox.setChecked(bool(rd))
                 self.ui.mix_date_checkbox.setChecked(bool(md))
                 self.ui.mix_external_date_checkbox.setEnabled(bool(md))
@@ -435,6 +449,7 @@ class GUI(QMainWindow):
 
     def save_settings(self):
         settings = {
+            'use_months_names': int(self.ui.use_monts_names.isChecked()),
             'range_dates': int(self.ui.range_date_checkbox.isChecked()),
             'mix_dates': int(self.ui.mix_date_checkbox.isChecked()),
             'mix_external_dates': int(self.ui.mix_external_date_checkbox.isChecked()),
@@ -470,13 +485,14 @@ class GUI(QMainWindow):
 
     def import_theme(self):
         downloads = Path('C:/Users', os.getlogin(), 'Downloads')
-        filename = QFileDialog.getOpenFileName(self, 'Import Theme', f'{downloads}',
+        filenames = QFileDialog.getOpenFileNames(self, 'Import Theme', f'{downloads}',
                                                'Theme Export File (*.tef)')
-        if filename[0]:
-            data = Path(filename[0]).read_bytes()
-            import_data = json.loads(b64.b85decode(data).decode())
+        if filenames[0]:
+            for file in filenames[0]:
+                data = Path(file).read_bytes()
+                import_data = json.loads(b64.b85decode(data).decode())
 
-            self.database.import_theme(import_data)
+                self.database.import_theme(import_data)
 
             self.home(reload=True)
             self.ui.create_themes_table.setRowCount(0)
@@ -486,12 +502,13 @@ class GUI(QMainWindow):
             self.ui.create_delete_button.setEnabled(False)
 
     def update_description(self):
-        theme_id = self.indexes_comp[self.ui.home_themes_table.currentRow()]
-        description = self.database.get_description(theme_id)
+        if self.ui.home_themes_table.currentRow() >= 0:
+            theme_id = self.indexes_comp[self.ui.home_themes_table.currentRow()]
+            description = self.database.get_description(theme_id)
 
-        self.ui.description_plain_text.clear()
-        self.ui.description_plain_text.insertPlainText(description)
-        self.ui.save_description_button.setEnabled(False)
+            self.ui.description_plain_text.clear()
+            self.ui.description_plain_text.insertPlainText(description)
+            self.ui.save_description_button.setEnabled(False)
 
     def save_description(self):
         theme_id = self.indexes_comp[self.ui.home_themes_table.currentRow()]
